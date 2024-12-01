@@ -2,7 +2,7 @@ package org.example.soa.controller;
 
 import org.example.soa.bean.Product;
 import org.example.soa.bean.ProductNotFoundException;
-import org.example.soa.bean.ProductRepository;
+import org.example.soa.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

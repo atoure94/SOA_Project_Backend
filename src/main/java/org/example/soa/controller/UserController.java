@@ -1,7 +1,7 @@
 package org.example.soa.controller;
 
 import org.example.soa.bean.User;
-import org.example.soa.bean.UserRepository;
+import org.example.soa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

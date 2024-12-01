@@ -1,5 +1,6 @@
-package org.example.soa.bean;
+package org.example.soa.repository;
 
+import org.example.soa.bean.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

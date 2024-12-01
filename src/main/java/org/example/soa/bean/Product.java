@@ -3,35 +3,62 @@ package org.example.soa.bean;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "product_id")
+    private Long productId;
 
+    @Column(nullable = false)
     private String name;
+
     private String description;
+
+    @Column(nullable = false)
     private double price;
-    private String ref; // Correction : ref est maintenant une chaîne de caractères.
 
-    // Getters et setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private String ref;
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    // Getters and Setters
+    public Long getProductId() {
+        return productId;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public String getName() {
+        return name;
+    }
 
-    public String getRef() { // Correction : ref est maintenant une chaîne de caractères.
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getRef() {
         return ref;
     }
-    public void setRef(String ref) { // Correction : ref est maintenant une chaîne de caractères.
+
+    public void setRef(String ref) {
         this.ref = ref;
     }
 }
