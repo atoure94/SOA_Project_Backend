@@ -3,7 +3,7 @@ package org.example.soa.bean;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "products")
+@Table(name = "app_products") // Renamed for consistency
 public class Product {
 
     @Id
@@ -11,7 +11,7 @@ public class Product {
     @Column(name = "product_id")
     private Long productId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
     private String description;
@@ -19,6 +19,7 @@ public class Product {
     @Column(nullable = false)
     private double price;
 
+    @Column(unique = true, length = 50) // Added uniqueness constraint
     private String ref;
 
     // Getters and Setters

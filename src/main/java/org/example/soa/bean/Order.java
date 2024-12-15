@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders") // Renamed to avoid SQL reserved keyword
 public class Order {
 
     @Id
@@ -21,13 +21,14 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // Assurez-vous que la classe User est définie
+    private User user; // Ensure the User class is defined as @Entity
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false) // Corrected field annotation
+    private Product product; // Ensure the Product class is defined as @Entity
 
     @Column(nullable = false)
     private int quantity;
-
-    @Column(name = "product_reference", nullable = false)
-    private String productReference;
 
     @Column(name = "order_date", nullable = false)
     private Date orderDate;
@@ -52,20 +53,20 @@ public class Order {
         this.user = user;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public int getQuantity() {
         return quantity;
     }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public String getProductReference() {
-        return productReference;
-    }
-
-    public void setProductReference(String productReference) {
-        this.productReference = productReference;
     }
 
     public Date getOrderDate() {

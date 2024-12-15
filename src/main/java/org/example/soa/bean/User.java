@@ -3,7 +3,7 @@ package org.example.soa.bean;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "app_users") // Renamed for consistency
 public class User {
 
     @Id
@@ -11,13 +11,13 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50, unique = true) // Added length and uniqueness for username
     private String username;
 
     @Column(nullable = false)
-    private String password;
+    private String password; // Consider storing a hashed password for security
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String role;
 
     // Getters and Setters
