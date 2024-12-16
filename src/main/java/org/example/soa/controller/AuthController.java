@@ -38,18 +38,18 @@ public class AuthController {
     }
 
 
-
     @PostMapping("/login")
-    public String loginUser(@RequestBody User loginRequest) {
+    public ResponseEntity<String> loginUser(@RequestBody User loginRequest) {
         User user = userRepository.findByUsername(loginRequest.getUsername());
         if (user == null) {
-            return "Username not found";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Username not found");
         }
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return "Invalid password";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
         }
-        return "Login successful";
+        return ResponseEntity.ok("Login successful");
     }
+
 
 
 
