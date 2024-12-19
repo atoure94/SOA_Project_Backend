@@ -1,48 +1,89 @@
 package org.example.soa.bean;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.util.List;
 
-import java.util.Date;
-
+@Table(name = "orders")
 @Entity
-@Table(name = "orders") // Renamed to avoid SQL reserved keyword
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user; // Ensure the User class is defined as @Entity
+    private String name;
+    private String address;
+    private String email;
+    private Double total;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false) // Corrected field annotation
-    private Product product; // Ensure the Product class is defined as @Entity
+    @ElementCollection
+    private List<String> productNames;
 
-    @Column(nullable = false)
-    private int quantity;
+    // Relation ManyToOne avec User
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)  // La colonne user_id dans la table orders
+    private User user;
 
-    @Column(name = "order_date", nullable = false)
-    private Date orderDate;
-
-    @Column(name = "order_status", nullable = false)
-    private String orderStatus;
-
-    // Getters and Setters
-    public Long getOrderId() {
-        return orderId;
+    public Order() {
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public Order(String name, String address, String email, Double total, List<String> productNames, User user) {
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.total = total;
+        this.productNames = productNames;
+        this.user = user;
+    }
+
+    // Getters et setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public List<String> getProductNames() {
+        return productNames;
+    }
+
+    public void setProductNames(List<String> productNames) {
+        this.productNames = productNames;
     }
 
     public User getUser() {
@@ -51,37 +92,5 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
     }
 }

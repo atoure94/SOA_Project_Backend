@@ -4,9 +4,9 @@ import org.example.soa.bean.Order;
 import org.example.soa.bean.Product;
 import org.example.soa.bean.User;
 import org.example.soa.repository.OrderRepository;
-import org.example.soa.repository.ProductRepository;
 import org.example.soa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,25 +14,19 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
-
-    // Get all orders
     @GetMapping
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    // Get a specific order by ID
+    // Récupérer une commande par ID
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
         return orderRepository.findById(id)
@@ -40,49 +34,49 @@ public class OrderController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Create a new order
+    // Créer une nouvelle commande
     @PostMapping
-    public ResponseEntity<Order> createOrder(@Valid @RequestBody Order order) {
-        // Validate User
-        User user = userRepository.findById(order.getUser().getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity<?> createOrder(@RequestBody Order order) {
 
-        // Validate Product
-        Product product = productRepository.findById(order.getProduct().getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        try{
 
-        // Associate user and product with the order
-        order.setUser(user);
-        order.setProduct(product);
 
-        // Save and return the order
-        Order savedOrder = orderRepository.save(order);
-        return ResponseEntity.ok(savedOrder);
+            Order savedOrder = orderRepository.save(order);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while creating the product: " + e.getMessage());
+        }
+
     }
 
-    // Update an existing order
+    // Mettre à jour une commande existante
     @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @Valid @RequestBody Order orderDetails) {
         return orderRepository.findById(id).map(order -> {
-            // Validate User
-            User user = userRepository.findById(orderDetails.getUser().getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+            // Mise à jour des champs
+            order.setName(orderDetails.getName());
+            order.setAddress(orderDetails.getAddress());
+            order.setEmail(orderDetails.getEmail());
+            order.setTotal(orderDetails.getTotal());
+            order.setProductNames(orderDetails.getProductNames());
 
-            // Validate Product
-            Product product = productRepository.findById(orderDetails.getProduct().getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
-
-            // Update fields
-            order.setUser(user);
-            order.setProduct(product);
-            order.setQuantity(orderDetails.getQuantity());
-            order.setOrderDate(orderDetails.getOrderDate());
-            order.setOrderStatus(orderDetails.getOrderStatus());
-
-            // Save and return the updated order
+            // Sauvegarde des modifications
             Order updatedOrder = orderRepository.save(order);
             return ResponseEntity.ok(updatedOrder);
         }).orElse(ResponseEntity.notFound().build());
+    }
+
+    // Supprimer une commande
+    @DeleteMapping("/{id}")
+
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        if (orderRepository.existsById(id)) { // Vérifie si l'ID existe
+            orderRepository.deleteById(id);  // Supprime directement par ID
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

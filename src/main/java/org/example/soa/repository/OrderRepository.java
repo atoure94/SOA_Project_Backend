@@ -2,18 +2,28 @@ package org.example.soa.repository;
 
 import org.example.soa.bean.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    // Find all orders by user ID
-    List<Order> findByUserUserId(Long userId);
 
-    // Find all orders with a specific status
-    List<Order> findByOrderStatus(String orderStatus);
+    // Trouver des commandes par email
+    List<Order> findByEmail(String email);
 
-    // Custom JPQL query: Find orders by product reference
-    @Query("SELECT o FROM Order o WHERE o.product.ref = ?1")
-    List<Order> findByProductRef(String productRef);
+    // Trouver des commandes par nom de produit
+    List<Order> findByProductNamesContaining(String productName);
+
+    // Trouver des commandes avec un total supérieur à un certain montant
+    List<Order> findByTotalGreaterThan(Double total);
+
+    // Trouver des commandes avec un total inférieur à un certain montant
+    List<Order> findByTotalLessThan(Double total);
+
+    // Trouver des commandes par nom
+    List<Order> findByName(String name);
+
+    // Trouver une commande par ID et email
+    Order findByIdAndEmail(Long id, String email);
 }

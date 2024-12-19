@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:5174")
@@ -39,15 +42,23 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody User loginRequest) {
+    public ResponseEntity<Object> loginUser(@RequestBody User loginRequest) {
+        // Recherche de l'utilisateur par son nom d'utilisateur
         User user = userRepository.findByUsername(loginRequest.getUsername());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Username not found");
         }
+
+        // Vérification du mot de passe
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
         }
-        return ResponseEntity.ok("Login successful");
+
+          Map<String, Object> response = new HashMap<>();
+        response.put("user", user);
+
+
+        return ResponseEntity.ok(response);
     }
 
 
